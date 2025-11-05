@@ -9,6 +9,9 @@ import SymptomChecker from "./pages/SymptomChecker";
 import Appointments from "./pages/Appointments";
 import Reminders from "./pages/Reminders";
 import Feedback from "./pages/Feedback";
+import DoctorsList from "./pages/DoctorsList";
+import DoctorDashboard from "./pages/DoctorDashboard";
+import { Auth } from "./components/Auth";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -21,11 +24,14 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/auth" element={<Auth />} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/symptom-checker" element={<SymptomChecker />} />
           <Route path="/appointments" element={<Appointments />} />
           <Route path="/reminders" element={<Reminders />} />
           <Route path="/feedback" element={<Feedback />} />
+          <Route path="/doctors" element={<DoctorsList />} />
+          <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

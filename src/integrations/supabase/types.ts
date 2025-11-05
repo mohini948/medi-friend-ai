@@ -19,10 +19,12 @@ export type Database = {
           appointment_date: string
           appointment_type: string
           created_at: string
+          doctor_id: string | null
           id: string
           notes: string | null
           provider_name: string
           status: string
+          time_slot_id: string | null
           updated_at: string
           user_id: string
         }
@@ -30,10 +32,12 @@ export type Database = {
           appointment_date: string
           appointment_type: string
           created_at?: string
+          doctor_id?: string | null
           id?: string
           notes?: string | null
           provider_name: string
           status?: string
+          time_slot_id?: string | null
           updated_at?: string
           user_id: string
         }
@@ -41,14 +45,31 @@ export type Database = {
           appointment_date?: string
           appointment_type?: string
           created_at?: string
+          doctor_id?: string | null
           id?: string
           notes?: string | null
           provider_name?: string
           status?: string
+          time_slot_id?: string | null
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "appointments_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appointments_time_slot_id_fkey"
+            columns: ["time_slot_id"]
+            isOneToOne: false
+            referencedRelation: "time_slots"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       conversations: {
         Row: {
@@ -71,6 +92,39 @@ export type Database = {
           title?: string | null
           updated_at?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      doctors: {
+        Row: {
+          about: string | null
+          created_at: string | null
+          experience_years: number
+          id: string
+          qualification: string
+          specialization: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          about?: string | null
+          created_at?: string | null
+          experience_years: number
+          id?: string
+          qualification: string
+          specialization: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          about?: string | null
+          created_at?: string | null
+          experience_years?: number
+          id?: string
+          qualification?: string
+          specialization?: string
+          updated_at?: string | null
+          user_id?: string
         }
         Relationships: []
       }
@@ -181,15 +235,110 @@ export type Database = {
           },
         ]
       }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          full_name: string
+          id: string
+          phone: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string | null
+          full_name: string
+          id: string
+          phone?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string | null
+          full_name?: string
+          id?: string
+          phone?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      time_slots: {
+        Row: {
+          created_at: string | null
+          day_of_week: number
+          doctor_id: string
+          end_time: string
+          id: string
+          is_available: boolean | null
+          start_time: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          day_of_week: number
+          doctor_id: string
+          end_time: string
+          id?: string
+          is_available?: boolean | null
+          start_time: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          day_of_week?: number
+          doctor_id?: string
+          end_time?: string
+          id?: string
+          is_available?: boolean | null
+          start_time?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "time_slots_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string | null
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "doctor" | "patient"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -316,6 +465,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "doctor", "patient"],
+    },
   },
 } as const
