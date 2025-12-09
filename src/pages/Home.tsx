@@ -93,8 +93,8 @@ export default function Home() {
             Get instant health advice, manage appointments, track medications, and more with our intelligent healthcare platform.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <Button size="lg" onClick={() => navigate("/auth")} className="bg-white text-primary hover:bg-white/90">
-              Get Started
+            <Button size="lg" onClick={() => navigate("/chat")} className="bg-white text-primary hover:bg-white/90">
+              Chat Now
             </Button>
             <Button size="lg" variant="outline" onClick={() => navigate("/doctors")} className="bg-transparent border-white text-white hover:bg-white/10">
               Book Appointment
